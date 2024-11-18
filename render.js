@@ -346,6 +346,45 @@ function videoControlsHandler(e) {
     }
 }
 
+function loadSubtitles(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const content = e.target.result;
+        
+        // If the file is SRT, convert it to VTT
+        if (file.name.endsWith('.srt')) {
+            const vttContent = srtToVTT(content);
+            createSubtitleBlob(vttContent);
+        } else {
+            createSubtitleBlob(content);
+        }
+    };
+    reader.readAsText(file);
+}
+
+function srtToVTT(srtContent) {
+    // Add WEBVTT header
+    let vttContent = 'WEBVTT\n\n';
+    
+    // Convert SRT timestamps to VTT format (they're very similar)
+    vttContent += srtContent
+        .replace(/\{\\[^}]+\}/g, '') // Remove styling tags
+        .replace(/\r\n|\r|\n/g, '\n') // Normalize line endings
+        .replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2') // Replace comma with dot in timestamps
+        .replace(/\n\n\n/g, '\n\n'); // Remove extra blank lines
+    
+    return vttContent;
+}
+
+function createSubtitleBlob(content) {
+    const blob = new Blob([content], { type: 'text/vtt' });
+    const url = URL.createObjectURL(blob);
+    
+    // Update the track element
+    const track = document.getElementById('subtitleTrack');
+    track.src = url;
+}
+
 function onChangeFile() {
 	const file = document.getElementById("file-id").files[0]
     const path = (window.URL || window.webkitURL).createObjectURL(file)
@@ -354,10 +393,28 @@ function onChangeFile() {
     localStorage.setItem("videoPath", path)
 }
 
+function onChangeSubFile() {
+	const file = document.getElementById("sub-file-id").files[0]
+    loadSubtitles(file)
+    const path = (window.URL || window.webkitURL).createObjectURL(file)
+    const size = file.size
+    localStorage.setItem("subSize", size)
+    localStorage.setItem("subPath", path)
+}
+
 function onChangeJoinFile() {
     const file = document.getElementById("join-file-id").files[0]
     const path = (window.URL || window.webkitURL).createObjectURL(file)
     const size = file.size
     localStorage.setItem("videoSize", size)
     localStorage.setItem("videoPath", path)
+}
+
+function onChangeJoinSubFile() {
+	const file = document.getElementById("join-sub-file-id").files[0]
+    loadSubtitles(file)
+    const path = (window.URL || window.webkitURL).createObjectURL(file)
+    const size = file.size
+    localStorage.setItem("subSize", size)
+    localStorage.setItem("subPath", path)
 }

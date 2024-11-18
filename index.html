@@ -87,9 +87,16 @@
                 >
                 </div>
                 <div class="mt-4">
+                  <label for="file-id" class="form-label">Select Video File</label>
                   <input type="file" class="form-control fileInput" id="file-id" onchange="onChangeFile();">
                   <br>
                   <p id="filePathText"></p>
+                </div>
+                <div class="mt-4"></div>
+                  <label for="sub-file-id" class="form-label">Select Subtitle File</label>
+                  <input type="file" class="form-control fileInput" id="sub-file-id" onchange="onChangeSubFile();">
+                  <br>
+                  <p id="subFilePathText"></p>
                 </div>
               </div>
               <div class="mt-4">
@@ -141,9 +148,16 @@
               >
               </div>
               <div class="mt-4">
+                <label for="join-file-id" class="form-label">Select Video File</label>
                 <input type="file" class="form-control fileInput" id="join-file-id" onchange="onChangeJoinFile();">
                 <br>
                 <p id="filePathText"></p>
+              </div>
+              <div class="mt-4">
+                <label for="join-sub-file-id" class="form-label">Select Subtitle File</label>
+                <input type="file" class="form-control fileInput" id="join-sub-file-id" onchange="onChangeJoinSubFile();">
+                <br>
+                <p id="subFilePathText"></p>
               </div>
               <div class="mt-4">
                 <button class="buttons" style="width: 10rem;" id="roomJoinButton">
@@ -169,6 +183,7 @@
                       data-setup='{}'
                     >
                       <source id="videoSrc" src="test.mp4" type="video/mp4" />
+                      <track id="subtitleTrack" kind="subtitles" src="" srclang="en" label="English" default>
                     </video>
                   </div>
                   <!-- <img src="loading.gif" alt="loader" id="loader"/> -->
